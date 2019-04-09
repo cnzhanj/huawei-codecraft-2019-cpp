@@ -8,7 +8,16 @@
 
 #ifndef PCH_H
 #define PCH_H
-
+#include<vector>
+#include<iostream>
+#include"Car.h"
+#include"Cross.h"
+#include"Road.h"
+#include"Initial.h"
+#include"Cal.h"
+#include<string>
+#include<fstream>
+//using namespace std;
 // TODO: 添加要在此处预编译的标头
 
 #endif //PCH_H

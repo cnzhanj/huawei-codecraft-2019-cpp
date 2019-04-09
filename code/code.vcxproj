@@ -151,10 +151,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Cal.h" />
+    <ClInclude Include="Car.h" />
+    <ClInclude Include="Cross.h" />
+    <ClInclude Include="Graph.h" />
+    <ClInclude Include="Road.h" />
+    <ClInclude Include="Initial.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Cal.cpp" />
+    <ClCompile Include="Car.cpp" />
     <ClCompile Include="code.cpp" />
+    <ClCompile Include="Cross.cpp" />
+    <ClCompile Include="Graph.cpp" />
+    <ClCompile Include="Road.cpp" />
+    <ClCompile Include="Initial.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

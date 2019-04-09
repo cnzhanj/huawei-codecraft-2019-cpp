@@ -18,12 +18,48 @@
     <ClInclude Include="pch.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Car.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Cross.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Initial.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Road.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Cal.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="code.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Car.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Cross.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Initial.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Road.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Cal.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Graph.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
