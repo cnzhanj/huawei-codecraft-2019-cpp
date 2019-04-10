@@ -5,15 +5,15 @@
 #include <iostream>
 using namespace std;
 string basePath = "F:\\硕士资料\\2018-2019\\HUAWEI\\2-map-training-2\\";
-string pathCar = basePath + "car.txt";
-string pathCross = basePath + "cross.txt";
-string pathRoad = basePath + "road.txt";
-string pathPresetAnswer = basePath + "presetAnswer.txt";
-string pathAnswer = basePath + "answer.txt";
+string carPath = basePath + "car.txt";
+string crossPath = basePath + "cross.txt";
+string roadPath = basePath + "road.txt";
+string presetAnswerPath = basePath + "presetAnswer.txt";
+string answerPath = basePath + "answer.txt";
 int main()
 {
 	Cal cal;
-	cal.init(pathCar, pathCross, pathRoad, pathPresetAnswer);
+	cal.init(carPath, crossPath, roadPath, presetAnswerPath);
 	cal.calDisMatrix();
 	cout << 1 << endl;
 	//cal.printDisMatrix();
@@ -24,7 +24,7 @@ int main()
 	cal.setMinDisPathRecordForCar();
 	cout << 3 << endl;
 	cal.setCarStartTime();
-	cal.writeAns(pathAnswer);
+	cal.writeAns(answerPath);
 	cout << 4 << endl;
 	
 	return 0;

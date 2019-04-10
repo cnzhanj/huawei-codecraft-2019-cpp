@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 #include "Cal.h"
-
-
+#include<math.h>
+#include<algorithm>
 Cal::Cal()
 {
 
@@ -182,6 +182,7 @@ void Cal::setCarStartTime()
 		
 		if (!mCar[i].getPreSet())
 		{
+			time = max(time, mCar[i].getPlanTime());
 			mCar[i].setActualTime(time);
 			cout << mCar[i].getActualTime() << endl;
 		}
