@@ -32,6 +32,16 @@ void Cal::mapCrossId()
 	}
 	mMapCrossId = crossId;
 }
+void Cal::mapRoadId()
+{
+	map<int, int> roadId;
+	for (int i = 0; i < mRoad.size(); i++)
+	{
+		//cout << mCross[i].getId() << " " << i << endl;
+		roadId[mRoad[i].getId()] = i;
+	}
+	mMapRoadId = roadId;
+}
 void Cal::calDisMatrix()
 {
 	vector<vector<int> > disMatrix(mCross.size(), vector<int>(mCross.size(), MAXDISTANCE));
@@ -57,6 +67,26 @@ void Cal::calDisMatrix()
 vector<vector<int> > Cal::getDisMatrix()
 {
 	return mDisMatrix;
+}
+void Cal::setVote(vector<Car > car)
+{
+	vector<vector<int> > vote(mCross.size(), vector<int>(mCross.size(), 0));
+	for (int i = 0; i < car.size(); i++)
+	{
+		vector<int> route = car[i].getPlanRoute();
+
+	}
+
+
+	for (int i = 0; i < mCross.size(); i++)
+	{
+		for (int j = 0; j < mCross.size(); j++)
+		{
+			mDisMatrix[i][j] += vote[i][j];
+		}
+	}
+	
+
 }
 void Cal::Floyd(vector<vector<int>> dis) 
 {
@@ -174,21 +204,47 @@ void Cal::setMinDisPathRecordForCar()
 }
 void Cal::setCarStartTime()
 {
-	int c = 1;
+	calDisMatrix();
+
+	Floyd(mDisMatrix);
+	setMinDisPathRecordForCar();
+
+	int count = 0;
+	for (int i = 0; i < mCar.size(); i++)
+	{
+		if (mCar[i].getPriority())
+		{
+			count++;
+			if (count == 5)
+			{
+
+			}
+		}
+	}
 	for (int i = 0; i < mCar.size(); i++)
 	{
 		
-		int time = (c / 30) + 1;
-		
-		if (!mCar[i].getPreSet())
-		{
-			time = max(time, mCar[i].getPlanTime());
-			mCar[i].setActualTime(time);
-			cout << mCar[i].getActualTime() << endl;
-		}
-		c = c + 1;
-		
+		Floyd(mDisMatrix);
+		setMinDisPathRecordForCar();
 	}
+	
+	
+
+
+
+
+	//int c = 1;
+	//for (int i = 0; i < mCar.size(); i++)
+	//{
+	//	int time = (c / 30) + 1;
+	//	if (!mCar[i].getPreSet())
+	//	{
+	//		time = max(time, mCar[i].getPlanTime());
+	//		mCar[i].setActualTime(time);
+	//		//cout << mCar[i].getActualTime() << endl;
+	//	}
+	//	c = c + 1;
+	//}
 }
 void Cal::printDisMatrix()
 {

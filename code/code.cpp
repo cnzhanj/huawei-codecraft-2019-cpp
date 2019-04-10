@@ -14,18 +14,8 @@ int main()
 {
 	Cal cal;
 	cal.init(carPath, crossPath, roadPath, presetAnswerPath);
-	cal.calDisMatrix();
-	cout << 1 << endl;
-	//cal.printDisMatrix();
-	vector<vector<int> > dis = cal.getDisMatrix();
-	cal.Floyd(dis);
-	//cal.printMinDisPathRecord();
-	cout << 2 << endl;
-	cal.setMinDisPathRecordForCar();
-	cout << 3 << endl;
 	cal.setCarStartTime();
 	cal.writeAns(answerPath);
-	cout << 4 << endl;
 	
 	return 0;
 }
