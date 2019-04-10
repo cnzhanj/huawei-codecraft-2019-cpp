@@ -5,7 +5,7 @@ class Cal
 {
 public:
 	Cal();
-	void init();
+	void init(string pathCar, string pathCross, string pathRoad, string pathPresetAnswer);
 	void calDisMatrix();
 	vector<vector<int> > getDisMatrix();
 	void mapCrossId();
@@ -15,6 +15,7 @@ public:
 	void printMinDisPathRecord();
 	void setMinDisPathRecordForCar();
 	void setRoadIdByCross();
+	void setCarStartTime();
 	~Cal();
 private:
 	vector<Car> mCar;

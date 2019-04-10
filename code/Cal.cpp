@@ -7,13 +7,9 @@ Cal::Cal()
 
 	//vector<vector<vector<int> > > minDisPath(mCross.size(), vector<int>(mCross.size(), vector<int>(mCross.size(), MAXDISTANCE));
 }
-void Cal::init()
+void Cal::init(string pathCar, string pathCross, string pathRoad, string pathPresetAnswer)
 {
-	string basePath = "F:\\硕士资料\\2018-2019\\HUAWEI\\2-map-training-2\\";
-	string pathCar = basePath + "car.txt";
-	string pathCross = basePath + "cross.txt";
-	string pathRoad = basePath + "road.txt";
-	string pathPresetAnswer = basePath + "presetAnswer.txt";
+	
 	Initial ini;
 	ini.initialCar(pathCar);
 	ini.initialCross(pathCross);
@@ -174,6 +170,23 @@ void Cal::setMinDisPathRecordForCar()
 			}
 			mCar[i].setPlanRoute(actualRoute);
 		}
+	}
+}
+void Cal::setCarStartTime()
+{
+	int c = 1;
+	for (int i = 0; i < mCar.size(); i++)
+	{
+		
+		int time = (c / 30) + 1;
+		
+		if (!mCar[i].getPreSet())
+		{
+			mCar[i].setActualTime(time);
+			cout << mCar[i].getActualTime() << endl;
+		}
+		c = c + 1;
+		
 	}
 }
 void Cal::printDisMatrix()

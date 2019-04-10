@@ -3,32 +3,53 @@
 
 #include "pch.h"
 #include <iostream>
-
+using namespace std;
+string basePath = "F:\\硕士资料\\2018-2019\\HUAWEI\\2-map-training-2\\";
+string pathCar = basePath + "car.txt";
+string pathCross = basePath + "cross.txt";
+string pathRoad = basePath + "road.txt";
+string pathPresetAnswer = basePath + "presetAnswer.txt";
+string pathAnswer = basePath + "answer.txt";
 int main()
 {
 	Cal cal;
-	cal.init();
+	cal.init(pathCar, pathCross, pathRoad, pathPresetAnswer);
 	cal.calDisMatrix();
+	cout << 1 << endl;
 	//cal.printDisMatrix();
 	vector<vector<int> > dis = cal.getDisMatrix();
-	cout << 1 << endl;
 	cal.Floyd(dis);
-	cout << 2 << endl;
 	//cal.printMinDisPathRecord();
- 	string basePath = "F:\\硕士资料\\2018-2019\\HUAWEI\\2-map-training-2\\";
-	string pathAnswer = basePath + "answer.txt";
+	cout << 2 << endl;
 	cal.setMinDisPathRecordForCar();
 	cout << 3 << endl;
+	cal.setCarStartTime();
 	cal.writeAns(pathAnswer);
 	cout << 4 << endl;
-	/*vector<vector<int> > dis(9, vector<int>(9, MAXDISTANCE));
+	
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*vector<vector<int> > dis(9, vector<int>(9, MAXDISTANCE));
 	for (int i = 0; i < dis.size(); i++)
 	{
 		for (int j = 0; j < dis.size(); j++)
 		{
 			if (i == j)
 				dis[i][j] = 0;
-			
+
 		}
 	}
 	dis[0][1] = 1;
@@ -58,7 +79,3 @@ int main()
 		}
 	}
 	*/
-	
-}
-
-
