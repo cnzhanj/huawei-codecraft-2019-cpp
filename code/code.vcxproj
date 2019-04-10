@@ -154,7 +154,6 @@
     <ClInclude Include="Cal.h" />
     <ClInclude Include="Car.h" />
     <ClInclude Include="Cross.h" />
-    <ClInclude Include="Graph.h" />
     <ClInclude Include="Road.h" />
     <ClInclude Include="Initial.h" />
     <ClInclude Include="pch.h" />
@@ -164,7 +163,6 @@
     <ClCompile Include="Car.cpp" />
     <ClCompile Include="code.cpp" />
     <ClCompile Include="Cross.cpp" />
-    <ClCompile Include="Graph.cpp" />
     <ClCompile Include="Road.cpp" />
     <ClCompile Include="Initial.cpp" />
     <ClCompile Include="pch.cpp">

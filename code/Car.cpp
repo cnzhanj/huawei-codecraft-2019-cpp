@@ -25,6 +25,7 @@ Car::Car(int id, int from, int to, int speed, int planTime, int priority, int pr
 	setPlanTime(planTime);
 	setPriority(priority);
 	setPreSet(preSet);
+	setActualTime(planTime);
 	//ans = new ArrayList<Integer>();
 }
 
