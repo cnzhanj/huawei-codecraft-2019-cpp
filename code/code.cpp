@@ -4,7 +4,7 @@
 #include "pch.h"
 #include <iostream>
 using namespace std;
-string basePath = "F:\\硕士资料\\2018-2019\\HUAWEI\\2-map-training-2\\";
+string basePath = "F:\\硕士资料\\2018-2019\\HUAWEI\\2-training-training-1-answer\\";
 string carPath = basePath + "car.txt";
 string crossPath = basePath + "cross.txt";
 string roadPath = basePath + "road.txt";
@@ -13,8 +13,10 @@ string answerPath = basePath + "answer.txt";
 int main()
 {
 	Cal cal;
+
 	cal.init(carPath, crossPath, roadPath, presetAnswerPath);
-	cal.setCarStartTime();
+
+	cal.mainFunction();
 	cal.writeAns(answerPath);
 	
 	return 0;

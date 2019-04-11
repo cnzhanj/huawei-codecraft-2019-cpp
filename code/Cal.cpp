@@ -4,7 +4,7 @@
 #include<algorithm>
 Cal::Cal()
 {
-
+	
 	//vector<vector<vector<int> > > minDisPath(mCross.size(), vector<int>(mCross.size(), vector<int>(mCross.size(), MAXDISTANCE));
 }
 void Cal::init(string pathCar, string pathCross, string pathRoad, string pathPresetAnswer)
@@ -19,7 +19,15 @@ void Cal::init(string pathCar, string pathCross, string pathRoad, string pathPre
 	mCar = ini.getCar();
 	mCross = ini.getCross();
 	mRoad = ini.getRoad();
-
+	for (int i = 0; i < mRoad.size(); i++)
+	{
+		mSaveRoadSpeed.push_back(mRoad[i].getSpeed());
+	}
+	vector < vector<double> > vote(mCross.size(), vector<double>(mCross.size(), 0));
+	mVote = vote;
+	mapCrossId();
+	mapRoadId();
+	mapCarId();
 	//mMinDis = (mCross.size(), vector<int>(mCross.size(), MAXDISTANCE));
 }
 void Cal::mapCrossId()
@@ -42,10 +50,21 @@ void Cal::mapRoadId()
 	}
 	mMapRoadId = roadId;
 }
+void Cal::mapCarId()
+{
+	map<int, int> carId;
+	for (int i = 0; i < mCar.size(); i++)
+	{
+		//cout << mCross[i].getId() << " " << i << endl;
+		carId[mCar[i].getId()] = i;
+	}
+	mMapCarId = carId;
+}
 void Cal::calDisMatrix()
 {
-	vector<vector<int> > disMatrix(mCross.size(), vector<int>(mCross.size(), MAXDISTANCE));
-	mapCrossId();
+	vector<vector<double> > disMatrix(mCross.size(), vector<double>(mCross.size(), MAXDISTANCE));
+
+	
 	//cout << mRoad.size() << endl << endl;
 	for (int i = 0; i < mRoad.size(); i++)
 	{
@@ -64,33 +83,118 @@ void Cal::calDisMatrix()
 	}
 	mDisMatrix = disMatrix;
 }
-vector<vector<int> > Cal::getDisMatrix()
+void Cal::initTimeMatrix()
 {
-	return mDisMatrix;
+	vector<vector<double> > timeMatrix(mCross.size(), vector<double>(mCross.size(), MAXDISTANCE));
+
+	//cout << mRoad.size() << endl << endl;
+	for (int i = 0; i < mRoad.size(); i++)
+	{
+		int fromId = mRoad[i].getFrom();
+		int toId = mRoad[i].getTo();
+		//cout << i << " " << fromId << " " << toId << endl;
+		int row = mMapCrossId[fromId];
+		int col = mMapCrossId[toId];
+		//cout << i << " " << row << " " << col << endl << endl;
+		int length = mRoad[i].getLength();
+		timeMatrix[row][col] = double(length/ mRoad[i].getSpeed());
+		if (mRoad[i].getIsDuplex())
+		{
+			timeMatrix[col][row] = double(length / mRoad[i].getSpeed());
+		}
+	}
+	mTimeMatrix = timeMatrix;
 }
-void Cal::setVote(vector<Car > car)
+void Cal::calTimeMatrix(vector<Car> car)
 {
-	vector<vector<int> > vote(mCross.size(), vector<int>(mCross.size(), 0));
+	vector<vector<double> > timeMatrix(mCross.size(), vector<double>(mCross.size(), 0));
+	//cout << mVote.size() << endl;
+	//vector<vector<int> > vote(mCross.size(), vector<int>(mCross.size(), 0));
 	for (int i = 0; i < car.size(); i++)
 	{
 		vector<int> route = car[i].getPlanRoute();
-
-	}
-
-
-	for (int i = 0; i < mCross.size(); i++)
-	{
-		for (int j = 0; j < mCross.size(); j++)
+		for (int j = 0; j < route.size(); j++)
 		{
-			mDisMatrix[i][j] += vote[i][j];
+			int indexRoad = mMapRoadId[route[j]];
+			int speed = min(mRoad[indexRoad].getSpeed(), car[i].getSpeed());
+			//mRoad[indexRoad].setSpeed(speed);
+			int fromId = mRoad[indexRoad].getFrom();
+			int toId = mRoad[indexRoad].getTo();
+
+			int row = mMapCrossId[fromId];
+			int col = mMapCrossId[toId];
+			timeMatrix[row][col] += double(mRoad[indexRoad].getLength() / speed);
+			timeMatrix[row][col] += mVote[row][col];
+
+			/*if (mRoad[i].getIsDuplex())
+			{
+				timeMatrix[col][row] = double(mRoad[indexRoad].getLength() / speed);
+			}*/
 		}
 	}
-	
-
+	for (int i = 0; i < timeMatrix.size(); i++)
+	{
+		for (int j = 0; j < timeMatrix[i].size(); j++)
+		{
+			mTimeMatrix[i][j] += timeMatrix[i][j];
+		}
+	}
 }
-void Cal::Floyd(vector<vector<int>> dis) 
+vector<vector<double> > Cal::getDisMatrix()
 {
-	vector<vector<int> > minDis(dis.size(), vector<int>(dis.size(), MAXDISTANCE));
+	return mDisMatrix;
+}
+vector<vector<double> > Cal::getTimeMatrix()
+{
+	return mTimeMatrix;
+}
+void Cal::updateSpeedMatrix(vector<Car> car)
+{
+	//vector<vector<int> > vote(mCross.size(), vector<int>(mCross.size(), 0));
+	for (int i = 0; i < car.size(); i++)
+	{
+		vector<int> route = car[i].getPlanRoute();
+		for (int j = 0; j < route.size(); j++)
+		{
+			int indexRoad = mMapRoadId[route[j]];
+			int speed = min(mRoad[indexRoad].getSpeed(),car[i].getSpeed());
+			mRoad[indexRoad].setSpeed(speed);
+		}
+	}
+}
+void Cal::resetSpeedMatrix()
+{
+	for (int i = 0; i < mRoad.size(); i++)
+	{
+		mRoad[i].setSpeed(mSaveRoadSpeed[i]);
+	}
+}
+void Cal::setVote(vector<Car> car)
+{
+	vector<vector<double> > vote(mCross.size(), vector<double>(mCross.size(), 0));
+	for (int i = 0; i < car.size(); i++)
+	{
+		vector<int> route = car[i].getPlanRoute();
+		for (int j = 0; j < route.size(); j++)
+		{
+			int indexRoad = mMapRoadId[route[j]];
+			int speed = min(mRoad[indexRoad].getSpeed(), car[i].getSpeed());
+			double add = 1.0/(speed * mRoad[indexRoad].getChannel());
+
+			int fromId = mRoad[indexRoad].getFrom();
+			int toId = mRoad[indexRoad].getTo();
+
+			int row = mMapCrossId[fromId];
+			int col = mMapCrossId[toId];
+
+			vote[row][col] += add;
+		}
+	}
+	mVote = vote;
+}
+void Cal::Floyd(vector<vector<double>> dis) 
+{
+	vector<vector<double> > minDis(dis.size(), vector<double>(dis.size(), MAXDISTANCE));
 	mMinDis = minDis;
 	
 	vector<vector<int> > minDisPath(dis.size(), vector<int>(dis.size(), -1));
@@ -185,6 +289,7 @@ void Cal::setMinDisPathRecordForCar()
 			{
 				actualCross.push_back(mCross[mMinDisPathRecord[indexFrom][indexTo][j]].getId());
 			}
+			mCar[i].setPlanCross(actualCross);
 			vector<int> actualRoute;
 			setRoadIdByCross();
 			for (int j = 0; j < actualCross.size() - 1; j++)
@@ -202,36 +307,111 @@ void Cal::setMinDisPathRecordForCar()
 		}
 	}
 }
-void Cal::setCarStartTime()
+void Cal::setCarStartTimeForCar(vector<Car> car, vector<int> time)
+{
+	//cout << car.size() << " " << time[0] << endl;
+	for (int i = 0; i < car.size(); i++)
+	{
+		int index = mMapCarId[car[i].getId()];
+		//cout << index << endl;
+		if(time[i] > mCar[index].getPlanTime())
+			mCar[index].setActualTime(time[i]);
+		else 
+			mCar[index].setActualTime(mCar[index].getPlanTime());
+	}
+}
+void Cal::mainFunction()
 {
 	calDisMatrix();
-
-	Floyd(mDisMatrix);
+	initTimeMatrix();
+	Floyd(mTimeMatrix);
 	setMinDisPathRecordForCar();
 
 	int count = 0;
+	vector<Car> priorityCar;
+	vector<int> starTimeMatrix;
+	int time = 0;
+	int currentTime = 0;
+	int sendPriCarEachTime = 1000;
 	for (int i = 0; i < mCar.size(); i++)
 	{
 		if (mCar[i].getPriority())
 		{
+			priorityCar.push_back(mCar[i]);
+			time = (currentTime / sendPriCarEachTime) + 1;
+			currentTime++;
+			//cout << currentTime << endl;
+			//cout << time << endl;
+			starTimeMatrix.push_back(time);
 			count++;
-			if (count == 5)
+			if ((count == sendPriCarEachTime))
 			{
-
+				cout << priorityCar.size() << endl;
+				calTimeMatrix(priorityCar);
+				setVote(priorityCar);
+				Floyd(mTimeMatrix);
+				setMinDisPathRecordForCar();
+				setCarStartTimeForCar(priorityCar, starTimeMatrix);
+				count = 0;
+				//cout << priorityCar[0].getActualTime() << endl;
+				priorityCar.clear();
+				starTimeMatrix.clear();
 			}
 		}
 	}
+	cout << priorityCar.size() << endl;
+	calTimeMatrix(priorityCar);
+	setVote(priorityCar);
+	Floyd(mTimeMatrix);
+	setMinDisPathRecordForCar();
+	setCarStartTimeForCar(priorityCar, starTimeMatrix);
+	count = 0;
+	//cout << priorityCar[0].getActualTime() << endl;
+	priorityCar.clear();
+	starTimeMatrix.clear();
+
+
+	vector<Car> nomalCar;
+	int sendNomalCarEachTime = 2000;
+	count = 0;
+	currentTime = 0;
+	int timePriEnd = time;
 	for (int i = 0; i < mCar.size(); i++)
 	{
-		
-		Floyd(mDisMatrix);
-		setMinDisPathRecordForCar();
+		if (!mCar[i].getPreSet() && !mCar[i].getPriority())
+		{
+			nomalCar.push_back(mCar[i]);
+			time = (currentTime / sendNomalCarEachTime) + timePriEnd;
+			currentTime++;
+			//cout << time << endl;
+			starTimeMatrix.push_back(time);
+			count++;
+
+			if ((count == sendNomalCarEachTime ))
+			{
+				cout << nomalCar.size() << endl;
+				calTimeMatrix(nomalCar);
+				setVote(nomalCar);
+				Floyd(mTimeMatrix);
+				setMinDisPathRecordForCar();
+				setCarStartTimeForCar(nomalCar, starTimeMatrix);
+				//cout << nomalCar[0].getActualTime() << endl;
+				count = 0;
+				nomalCar.clear();
+				starTimeMatrix.clear();
+			}
+		}
 	}
-	
-	
-
-
-
+	cout << nomalCar.size() << endl;
+	calTimeMatrix(nomalCar);
+	setVote(nomalCar);
+	Floyd(mTimeMatrix);
+	setMinDisPathRecordForCar();
+	setCarStartTimeForCar(nomalCar, starTimeMatrix);
+	//cout << nomalCar[0].getActualTime() << endl;
+	count = 0;
+	nomalCar.clear();
+	starTimeMatrix.clear();
 
 	//int c = 1;
 	//for (int i = 0; i < mCar.size(); i++)
@@ -267,7 +447,8 @@ void Cal::writeAns(string pathAnswer)
 	{
 		if (!mCar[i].getPreSet())
 		{
-			answer << '(' << mCar[i].getID() << ',' << mCar[i].getActualTime() << ',';
+			//cout << mCar[i].getActualTime() << endl;
+			answer << '(' << mCar[i].getId() << ',' << mCar[i].getActualTime() << ',';
 			vector<int> planRoute = mCar[i].getPlanRoute();
 			for (int j = 0; j < planRoute.size(); j++)
 			{

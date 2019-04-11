@@ -9,7 +9,7 @@ public:
 	Car(vector<int> carData);
 	Car(int id, int from, int to, int speed, int planTime, int priority, int preSet);
 	
-	int getID();
+	int getId();
 	int getFrom();
 	int getTo();
 	int getSpeed();
@@ -17,9 +17,10 @@ public:
 	int getPriority();
 	int getPreSet();
 	int getActualTime();
+	vector<int> getPlanCross();
 	vector<int> getPlanRoute();
 
-	void setID(int id);
+	void setId(int id);
 	void setFrom(int from);
 	void setTo(int to);
 	void setSpeed(int speed);
@@ -27,6 +28,7 @@ public:
 	void setPriority(int priority);
 	void setPreSet(int preSet);
 	void setActualTime(int time);
+	void setPlanCross(vector<int> planCross);
 	void setPlanRoute(vector<int> planRoute);
 	
 
@@ -42,6 +44,7 @@ private:
 	int mPreSet;
 	int mActualTime;
 	//map <int, int> mMapIdToIndex;
+	vector<int> mPlanCross;
 	vector<int> mPlanRoute;
 };
 
